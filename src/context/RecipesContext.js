@@ -19,7 +19,7 @@ const RecipesProvider = (props) => {
       const getRecipes = async () => {
         const url = `https://themealdb.com/api/json/v1/1/filter.php?i=${name}&c=${category}`
         const result = await axios.get(url);
-        console.log(result.data.meals);
+
         saveRecipes(result.data.meals);
       }
       getRecipes();
