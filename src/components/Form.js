@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { CategoryContext } from '../context/CategoryContext';
+import { RecipesContext } from '../context/RecipesContext';
 
 const Form = () => {
   const [search, saveSearch] = useState({
@@ -7,18 +8,25 @@ const Form = () => {
     category: ''
   })
   const { categories } = useContext(CategoryContext);
-
+  const { searchRecipes, saveConsult } = useContext(RecipesContext);
   //función para leer los contenidos
   const getDataRecipe = ev => {
 
     saveSearch({
       ...search,
-      [ev.target.name] : ev.target.value
+      [ev.target.name]: ev.target.value
     })
   }
   return (
 
-    <form className="col-12">
+    <form
+      className="col-12"
+      onSubmit={ev => {
+        ev.preventDefault();
+        searchRecipes(search);
+        saveConsult(true);
+      }}
+    >
 
       <fieldset className="text-center">
         <legend>Busca por categoría o ingrediente</legend>
