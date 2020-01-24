@@ -8,6 +8,7 @@ const ModalProvider = (props) => {
 
   //state del provider
   const [idrecipe, saveIdRecipe] = useState(null);
+  const [info, saveRecipe] = useState({});
 
   //Teniendo una receta, llamamos a la api para que nos muestre el detalle de la misma
   useEffect(() => {
@@ -15,14 +16,18 @@ const ModalProvider = (props) => {
       if (!idrecipe) return;
       const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idrecipe}`;
       const result = await axios.get(url);
-      console.log(result);
+      saveRecipe(result.data.meals[0]);
+      
     }
     getRecipe();
   }, [idrecipe]);
+
   return (
     <ModalContext.Provider
       value={{
-        saveIdRecipe
+        info,
+        saveIdRecipe,
+        saveRecipe
       }}>
       {props.children}
     </ModalContext.Provider>

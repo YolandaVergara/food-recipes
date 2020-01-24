@@ -17,7 +17,7 @@ function getModalStyle() {
 const useStyles = makeStyles(theme => ({
   paper: {
     position: 'absolute',
-    width: 600,
+    width: 400,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
@@ -40,7 +40,20 @@ const Recipe = ({ recipe }) => {
   }
 
   //extraemos los valores del ModalContext
-  const { saveIdRecipe } = useContext(ModalContext);
+  const { info, saveIdRecipe, saveRecipe } = useContext(ModalContext);
+  //mostrar ingredientes en función de la info traída de la API
+  const showIngredients = info => {
+    let ingredients = [];
+    for (let i = 1; i < 16; i++) {
+      if (info[`strIngredient${i}`]) {
+        ingredients.push(
+          <li>{info[`strIngredient${i}`]} {info[`strMeasure${i}`]}</li>
+        )
+      }
+    }
+    return ingredients;
+  }
+
   return (
     <div className="col-md-4 mb-3">
       <div className="card">
@@ -57,14 +70,24 @@ const Recipe = ({ recipe }) => {
           >
             Ver receta
           </button>
+
+
           <Modal
             open={open}
             onClose={() => {
               saveIdRecipe(null);
+              saveRecipe({});
               handleClose();
             }}>
             <div style={modalStyle} className={classes.paper}>
-              <h1>Desde Modal</h1>
+              <h2>{info.strMeal}</h2>
+              <h3 className="mt-4">Instrucciones</h3>
+              <p>{info.strInstructions}</p>
+              <img className="img-fluid my-4" src={info.strMealThumb} alt={info.strMeal} />
+              <h3>Ingredientes y cantidades</h3>
+              <ul>
+                {showIngredients(info)}
+              </ul>
             </div>
           </Modal>
         </div>
